@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Crawer extends WebCrawler {
-    private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg" + "|png|mp3|mp4|zip|gz|about))$");
+    private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg" + "|png|mp3|mp4|zip|gz))$");
     private final static String TAG_SELECTOR = "";
     private final static FileHelper fileHelper = FileHelper.getInstance(Controller.crawlStorageFolder);
     /**
@@ -35,7 +35,7 @@ public class Crawer extends WebCrawler {
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
         return !FILTERS.matcher(href).matches()
-                && href.startsWith("https://www.engadget.com/");
+                && href.contains("cnn.com");
     }
 
     /**
@@ -49,10 +49,7 @@ public class Crawer extends WebCrawler {
 
         if (page.getParseData() instanceof HtmlParseData) {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-            String text = htmlParseData.getText();
             String html = htmlParseData.getHtml();
-            Set<WebURL> links = htmlParseData.getOutgoingUrls();
-
             Document document = Jsoup.parse(html);
             Elements elements = document.getElementsByClass("article-text");
             String content = elements.text();
